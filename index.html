@@ -117,16 +117,7 @@
     font-size: 12px;
     color: #8D7860;
   }
-  /* 성공 시 화면 번쩍 */
-.success-flash {
-  animation: flash 0.15s ease-in-out 3;
-}
 
-@keyframes flash {
-  0% { background: white; }
-  50% { background: #ffe066; }
-  100% { background: white; }
-}
 
 /* 성공 이미지 폭발 */
 .success-burst {
@@ -138,6 +129,57 @@
   30% { transform: scale(1.4) rotate(-3deg); }
   60% { transform: scale(0.95) rotate(2deg); }
   100% { transform: scale(1); }
+}
+
+  /* 폭죽 파티클 */
+.particle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: explode 900ms ease-out forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* 퇴근 텍스트 */
+.success-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  font-size: 64px;
+  font-weight: bold;
+  color: #8D7860;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  animation: textPop 700ms ease-out forwards;
+}
+
+@keyframes textPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 </style>
 </head>
@@ -187,25 +229,25 @@
     { img: "https://i.imgur.com/43V1qXZ.png", text: "당신은 퇴근입니다!!! 퇴근하세요!!!", success: true },
 
     { img: "https://i.imgur.com/iXYlT72.png", text: "당신은... 돼근입니다." },
-    { img: "https://i.imgur.com/Hj3WzRD.png", text: "당신은... 되근입니다." },
-    { img: "https://i.imgur.com/i7u6ruv.png", text: "당신은... 야근입니다." },
-    { img: "https://i.imgur.com/lu0Fc0c.png", text: "당신은... 잔업입니다." },
-    { img: "https://i.imgur.com/EIp79VK.png", text: "당신은... 최근입니다." },
-    { img: "https://i.imgur.com/dfvstTb.png", text: "당신은... 퇴글입니다." },
-    { img: "https://i.imgur.com/IzwTjVw.png", text: "당신은... 출근입니다." },
-    { img: "https://i.imgur.com/pJYzzc7.png", text: "당신은... 택견입니다." },
-    { img: "https://i.imgur.com/7zQQjob.png", text: "당신은... 토i근입니다." },
-    { img: "https://i.imgur.com/0w22csA.png", text: "당신은... 퇘근입니다." },
-    { img: "https://i.imgur.com/f804lz2.png", text: "당신은... 퇴군입니다." },
-    { img: "https://i.imgur.com/EcsB4z7.png", text: "당신은... 퇴귿입니다." },
-    { img: "https://i.imgur.com/YTeb28e.png", text: "당신은... 퇴긍입니다." },
-    { img: "https://i.imgur.com/sVzyhut.png", text: "당신은... 퇴긴입니다." },
-    { img: "https://i.imgur.com/KD4dlGH.png", text: "당신은... 퇴끈입니다." },
-    { img: "https://i.imgur.com/6bZUuGo.png", text: "당신은... 퇴큰입니다." },
-    { img: "https://i.imgur.com/KSsHZdL.png", text: "당신은... 퉤!!!" },
+ //   { img: "https://i.imgur.com/Hj3WzRD.png", text: "당신은... 되근입니다." },
+ //   { img: "https://i.imgur.com/i7u6ruv.png", text: "당신은... 야근입니다." },
+  //  { img: "https://i.imgur.com/lu0Fc0c.png", text: "당신은... 잔업입니다." },
+ //   { img: "https://i.imgur.com/EIp79VK.png", text: "당신은... 최근입니다." },
+//    { img: "https://i.imgur.com/dfvstTb.png", text: "당신은... 퇴글입니다." },
+//    { img: "https://i.imgur.com/IzwTjVw.png", text: "당신은... 출근입니다." },
+//    { img: "https://i.imgur.com/pJYzzc7.png", text: "당신은... 택견입니다." },
+//    { img: "https://i.imgur.com/7zQQjob.png", text: "당신은... 토i근입니다." },
+//    { img: "https://i.imgur.com/0w22csA.png", text: "당신은... 퇘근입니다." },
+//    { img: "https://i.imgur.com/f804lz2.png", text: "당신은... 퇴군입니다." },
+//    { img: "https://i.imgur.com/EcsB4z7.png", text: "당신은... 퇴귿입니다." },
+//    { img: "https://i.imgur.com/YTeb28e.png", text: "당신은... 퇴긍입니다." },
+//    { img: "https://i.imgur.com/sVzyhut.png", text: "당신은... 퇴긴입니다." },
+ //   { img: "https://i.imgur.com/KD4dlGH.png", text: "당신은... 퇴끈입니다." },
+ //   { img: "https://i.imgur.com/6bZUuGo.png", text: "당신은... 퇴큰입니다." },
+//    { img: "https://i.imgur.com/KSsHZdL.png", text: "당신은... 퉤!!!" },
 
-    { img: "https://i.imgur.com/DkcENqR.png", text: "당신은... 퉤근입니다." },  // ✅ 버그 수정
-    { img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
+//    { img: "https://i.imgur.com/DkcENqR.png", text: "당신은... 퉤근입니다." },  // ✅ 버그 수정
+  //  { img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
     { img: "https://i.imgur.com/cQ5gOlf.png", text: "당신은... 훠궈입니다.\n맛있겠다." }
   ];
 
@@ -254,17 +296,41 @@
     document.getElementById("resultImage").src = imgSrc;
     document.getElementById("resultText").innerText = text;
   }
- function triggerSuccessEffect() {
-    document.body.classList.add("success-flash");
+function triggerSuccessEffect() {
 
-    const img = document.getElementById("resultImage");
-    img.classList.add("success-burst");
+  // 🎉 퇴근 텍스트 생성
+  const text = document.createElement("div");
+  text.className = "success-text";
+  text.innerText = "퇴근!!!";
+  document.body.appendChild(text);
 
-    setTimeout(() => {
-      document.body.classList.remove("success-flash");
-      img.classList.remove("success-burst");
-    }, 700);
+  setTimeout(() => text.remove(), 700);
+
+  // 🎆 폭죽 파티클 생성
+  const colors = ["#ff6b6b", "#ffd93d", "#6bcBef", "#b197fc", "#95d5b2"];
+
+  for (let i = 0; i < 80; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 80 + Math.random() * 160;
+
+    const dx = Math.cos(angle) * distance + "px";
+    const dy = Math.sin(angle) * distance + "px";
+
+    p.style.left = "50%";
+    p.style.top = "50%";
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    p.style.setProperty("--dx", dx);
+    p.style.setProperty("--dy", dy);
+
+    document.body.appendChild(p);
+
+    setTimeout(() => p.remove(), 900);
   }
+}
 
    function drawCocoa() {
     const drawImg = document.getElementById("drawImage");
