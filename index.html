@@ -136,15 +136,15 @@
 
     <!-- 버튼형 카운터 -->
     <div class="try-counter">
-      오늘의 시도 횟수
+      오늘의 퇴근 시도 횟수
       <span id="countNumber" class="count-number">0</span>
     </div>
   </div>
 
   <div class="title-image" onclick="drawCocoa()">
     <img id="drawImage"
-         src="https://i.imgur.com/D4nCoQW.png"
-         alt="코코아 운세">
+         src="https://i.imgur.com/FrkpWnb.png"
+         alt="퇴근확인">
   </div>
 
   <div class="result" id="resultBox">
@@ -162,10 +162,10 @@
 
 <script>
   const items = [
-    { img: "https://i.imgur.com/bVvaxfi.png", text: "오늘의 커피 운세는?\n도토리 1톨!" },
-    { img: "https://i.imgur.com/p635FDn.png", text: "오늘의 커피 운세는?\n도토리 2톨!!" },
-    { img: "https://i.imgur.com/DfojvDj.png", text: "오늘의 커피 운세는?\n도토리 3톨!!!" },
-    { img: "https://i.imgur.com/a1yOTmV.png", text: "꽝!!!!" }
+    { img: "https://i.imgur.com/43V1qXZ.png", text: "당신은 퇴근입니다!!! 퇴근하세요!!!" },
+    { img: "", text: "오늘의 커피 운세는?\n도토리 2톨!!" },
+    { img: "", text: "오늘의 커피 운세는?\n도토리 3톨!!!" },
+    { img: "", text: "꽝!!!!" }
   ];
 
   function getTodayKey() {
@@ -243,7 +243,7 @@
     document.getElementById("todayText").innerText =
       `오늘 날짜 · ${formatToday()}`;
     document.getElementById("countdownText").innerText =
-      `다음 커피까지 남은 시간 · ${getTimeUntilMidnight()}`;
+      `초과 업무까지 남은 시간 · ${getTimeUntilMidnight()}`;
   }
 
   window.onload = function () {
