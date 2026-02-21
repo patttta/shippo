@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>퐁모코 커피 운세</title>
+<title>꼬리상사 퇴근전쟁</title>
 
 <style>
   body {
@@ -58,10 +58,35 @@
     white-space: pre-line;
   }
 
-  .copyright {
-    margin-top: 100px;
-    font-size: 12px;
-    color: #8D7860;
+  /* 횟수 버튼 */
+  .try-counter {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: #8D7860;
+    color: white;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    transform: scale(1);
+  }
+
+  .count-number {
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 6px;
+  }
+
+  /* 숫자 변경 애니메이션 */
+  @keyframes bump {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.25); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .bump {
+    animation: bump 0.35s ease;
   }
 
   @keyframes heartbeat {
@@ -86,6 +111,12 @@
   .pop {
     animation: pop 0.35s ease-out;
   }
+
+  .copyright {
+    margin-top: 100px;
+    font-size: 12px;
+    color: #8D7860;
+  }
 </style>
 </head>
 
@@ -94,15 +125,20 @@
 <div class="container">
 
   <div class="logo-wrap">
-    <img src="https://i.imgur.com/rYcxn0Z.png"
+    <img src="https://i.imgur.com/EPFQHHT.png"
          alt="퐁모코 로고"
          onclick="location.reload()">
   </div>
 
-  <div id="dateInfo" style="margin-bottom:20px; color:#8D7860; font-size:14px;">
+  <div style="margin-bottom:20px; color:#8D7860; font-size:14px;">
     <div id="todayText"></div>
     <div id="countdownText"></div>
-    <div id="tryCountText"></div>
+
+    <!-- 버튼형 카운터 -->
+    <div class="try-counter">
+      오늘의 시도 횟수
+      <span id="countNumber" class="count-number">0</span>
+    </div>
   </div>
 
   <div class="title-image" onclick="drawCocoa()">
@@ -154,8 +190,7 @@
   }
 
   function getTodayTryCount() {
-    const key = "tryCount_" + getTodayKey();
-    return parseInt(localStorage.getItem(key) || "0");
+    return parseInt(localStorage.getItem("tryCount_" + getTodayKey()) || "0");
   }
 
   function increaseTryCount() {
@@ -165,9 +200,13 @@
     return newCount;
   }
 
-  function updateTryCountUI(count) {
-    document.getElementById("tryCountText").innerText =
-      `오늘의 시도 횟수 · ${count}번`;
+  function animateCounter(newValue) {
+    const el = document.getElementById("countNumber");
+    el.textContent = newValue;
+
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
   }
 
   function showResult(imgSrc, text) {
@@ -193,11 +232,11 @@
       void img.offsetWidth;
       img.classList.add("pop");
 
+      animateCounter(count);
+
       localStorage.setItem("lastDrawImg", result.img);
       localStorage.setItem("lastDrawText", result.text);
-
-      updateTryCountUI(count);
-    }, 1200);
+    }, 800);
   }
 
   function updateDateInfo() {
@@ -205,13 +244,13 @@
       `오늘 날짜 · ${formatToday()}`;
     document.getElementById("countdownText").innerText =
       `다음 커피까지 남은 시간 · ${getTimeUntilMidnight()}`;
-
-    updateTryCountUI(getTodayTryCount());
   }
 
   window.onload = function () {
     updateDateInfo();
     setInterval(updateDateInfo, 1000);
+
+    animateCounter(getTodayTryCount());
 
     if (localStorage.getItem("lastDrawImg")) {
       showResult(
