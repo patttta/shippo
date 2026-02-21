@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>퐁모코 커피 운세</title>
+
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    text-align: center;
+    padding: 60px;
+  }
+
+  .logo-wrap {
+    margin-bottom: 30px;
+  }
+
+  .logo-wrap img {
+    max-width: 350px;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .title-image {
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  .title-image img {
+    max-width: 280px;
+    width: 100%;
+  }
+
+  .result {
+    margin-top: 30px;
+  }
+
+  .image-box {
+    width: 100%;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  .result-text {
+    margin-top: 18px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #8D7860;
+    white-space: pre-line;
+  }
+
+  .copyright {
+    margin-top: 100px;
+    font-size: 12px;
+    color: #8D7860;
+  }
+
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.05); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .waiting {
+    animation: heartbeat 0.6s ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes pop {
+    0% { opacity: 0; transform: scale(0.85); }
+    60% { opacity: 1; transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .pop {
+    animation: pop 0.35s ease-out;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="logo-wrap">
+    <img src="https://i.imgur.com/rYcxn0Z.png"
+         alt="퐁모코 로고"
+         onclick="location.reload()">
+  </div>
+
+  <div id="dateInfo" style="margin-bottom:20px; color:#8D7860; font-size:14px;">
+    <div id="todayText"></div>
+    <div id="countdownText"></div>
+    <div id="tryCountText"></div>
+  </div>
+
+  <div class="title-image" onclick="drawCocoa()">
+    <img id="drawImage"
+         src="https://i.imgur.com/D4nCoQW.png"
+         alt="코코아 운세">
+  </div>
+
+  <div class="result" id="resultBox">
+    <div class="image-box">
+      <img id="resultImage">
+    </div>
+    <div class="result-text" id="resultText"></div>
+  </div>
+
+  <div class="copyright">
+    © Pong PocoPoco Project
+  </div>
+
+</div>
+
+<script>
+  const items = [
+    { img: "https://i.imgur.com/bVvaxfi.png", text: "오늘의 커피 운세는?\n도토리 1톨!" },
+    { img: "https://i.imgur.com/p635FDn.png", text: "오늘의 커피 운세는?\n도토리 2톨!!" },
+    { img: "https://i.imgur.com/DfojvDj.png", text: "오늘의 커피 운세는?\n도토리 3톨!!!" },
+    { img: "https://i.imgur.com/a1yOTmV.png", text: "꽝!!!!" }
+  ];
+
+  function getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  }
+
+  function formatToday() {
+    const d = new Date();
+    return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+  }
+
+  function getTimeUntilMidnight() {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24,0,0,0);
+    const diff = midnight - now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+    const m = String(Math.floor(diff/60000)%60).padStart(2,"0");
+    const s = String(Math.floor(diff/1000)%60).padStart(2,"0");
+    return `${h}:${m}:${s}`;
+  }
+
+  function getTodayTryCount() {
+    const key = "tryCount_" + getTodayKey();
+    return parseInt(localStorage.getItem(key) || "0");
+  }
+
+  function increaseTryCount() {
+    const key = "tryCount_" + getTodayKey();
+    const newCount = getTodayTryCount() + 1;
+    localStorage.setItem(key, newCount);
+    return newCount;
+  }
+
+  function updateTryCountUI(count) {
+    document.getElementById("tryCountText").innerText =
+      `오늘의 시도 횟수 · ${count}번`;
+  }
+
+  function showResult(imgSrc, text) {
+    document.getElementById("resultImage").src = imgSrc;
+    document.getElementById("resultText").innerText = text;
+  }
+
+  function drawCocoa() {
+    const drawImg = document.getElementById("drawImage");
+    drawImg.classList.add("waiting");
+
+    const count = increaseTryCount();
+
+    setTimeout(() => {
+      drawImg.classList.remove("waiting");
+
+      const result = items[Math.floor(Math.random() * items.length)];
+
+      showResult(result.img, result.text);
+
+      const img = document.getElementById("resultImage");
+      img.classList.remove("pop");
+      void img.offsetWidth;
+      img.classList.add("pop");
+
+      localStorage.setItem("lastDrawImg", result.img);
+      localStorage.setItem("lastDrawText", result.text);
+
+      updateTryCountUI(count);
+    }, 1200);
+  }
+
+  function updateDateInfo() {
+    document.getElementById("todayText").innerText =
+      `오늘 날짜 · ${formatToday()}`;
+    document.getElementById("countdownText").innerText =
+      `다음 커피까지 남은 시간 · ${getTimeUntilMidnight()}`;
+
+    updateTryCountUI(getTodayTryCount());
+  }
+
+  window.onload = function () {
+    updateDateInfo();
+    setInterval(updateDateInfo, 1000);
+
+    if (localStorage.getItem("lastDrawImg")) {
+      showResult(
+        localStorage.getItem("lastDrawImg"),
+        localStorage.getItem("lastDrawText")
+      );
+    }
+  };
+</script>
+
+</body>
+</html>
