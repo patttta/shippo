@@ -229,7 +229,15 @@ const items = [
     { img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
     { img: "https://i.imgur.com/cQ5gOlf.png", text: "당신은... 훠궈입니다.\n맛있겠다." }
 ];
-
+function getTodayKey() { const d = new Date(); return ${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}; } 
+  function formatToday() { const d = new Date(); return ${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일; } 
+  function getTimeUntilMidnight() { 
+    const now = new Date(); 
+const midnight = new Date(); midnight.setHours(24,0,0,0);
+    const diff = midnight - now; const h = String(Math.floor(diff/3600000)).padStart(2,"0"); 
+    const m = String(Math.floor(diff/60000)%60).padStart(2,"0"); const s = String(Math.floor(diff/1000)%60).padStart(2,"0"); 
+    return ${h}:${m}:${s}; }
+  
 function toggleSuccessCircle(show) {
   document.getElementById("successCircle").classList.toggle("show", show);
 }
@@ -262,7 +270,7 @@ function triggerSuccessEffect() {
     setTimeout(() => p.remove(), cfg.duration);
   }
 }
-
+function updateDateInfo() { document.getElementById("todayText").innerText = 오늘 날짜 · ${formatToday()}; document.getElementById("countdownText").innerText = 초과 업무까지 남은 시간 · ${getTimeUntilMidnight()}; }
 function showResult(result) {
   const textEl = document.getElementById("resultText");
 
