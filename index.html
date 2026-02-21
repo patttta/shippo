@@ -217,7 +217,28 @@
 
   z-index: 0;
 }
+.result-text.bold {
+  font-weight: bold;
+  animation: holyGlow 1.6s ease-in-out infinite;
+}
 
+/* 성스러운 빛 느낌 */
+@keyframes holyGlow {
+  0% {
+    text-shadow: 0 0 0px rgba(255, 230, 120, 0.0);
+    transform: scale(1);
+  }
+  40% {
+    text-shadow:
+      0 0 8px rgba(255, 230, 120, 0.55),
+      0 0 18px rgba(255, 210, 90, 0.35);
+    transform: scale(1.03);
+  }
+  100% {
+    text-shadow: 0 0 0px rgba(255, 230, 120, 0.0);
+    transform: scale(1);
+  }
+}
 /* 성공 시 활성화 */
 .success-circle.show {
   opacity: 1;
@@ -381,10 +402,19 @@ function spawnSuccessCircle() {
     el.classList.add("bump");
   }
 
-  function showResult(imgSrc, text) {
-    document.getElementById("resultImage").src = imgSrc;
-    document.getElementById("resultText").innerText = text;
+function showResult(imgSrc, text, success) {
+  const img = document.getElementById("resultImage");
+  const textEl = document.getElementById("resultText");
+
+  img.src = imgSrc;
+  textEl.innerText = text;
+
+  if (success) {
+    textEl.classList.add("bold");
+  } else {
+    textEl.classList.remove("bold");
   }
+}
   function toggleSuccessCircle(show) {
   const circle = document.getElementById("successCircle");
 
@@ -445,9 +475,9 @@ function triggerSuccessEffect() {
     setTimeout(() => {
       drawImg.classList.remove("waiting");
 
-      const result = items[Math.floor(Math.random() * items.length)];
+const result = items[Math.floor(Math.random() * items.length)];
 
-      showResult(result.img, result.text);
+showResult(result.img, result.text, result.success);
 toggleSuccessCircle(!!result.success);
       const img = document.getElementById("resultImage");
       img.classList.remove("pop");
