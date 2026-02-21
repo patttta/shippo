@@ -11,29 +11,13 @@
     padding: 60px;
   }
 
-  .logo-wrap {
-    margin-bottom: 30px;
-  }
+  .logo-wrap { margin-bottom: 30px; }
+  .logo-wrap img { max-width: 350px; width: 100%; cursor: pointer; }
 
-  .logo-wrap img {
-    max-width: 350px;
-    width: 100%;
-    cursor: pointer;
-  }
+  .title-image { margin-bottom: 30px; cursor: pointer; }
+  .title-image img { max-width: 400px; width: 100%; }
 
-  .title-image {
-    margin-bottom: 30px;
-    cursor: pointer;
-  }
-
-  .title-image img {
-    max-width: 400px;
-    width: 100%;
-  }
-
-  .result {
-    margin-top: 30px;
-  }
+  .result { margin-top: 30px; }
 
   .image-box {
     width: 100%;
@@ -41,6 +25,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+  }
+
+  .success-circle {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: #FFF3B0;
+    filter: blur(35px);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: 0.35s ease;
+    z-index: 0;
+  }
+
+  .success-circle.show {
+    opacity: 1;
+    transform: scale(1.05);
   }
 
   .image-box img {
@@ -48,6 +51,8 @@
     max-height: 100%;
     object-fit: contain;
     border-radius: 12px;
+    position: relative;
+    z-index: 1;
   }
 
   .result-text {
@@ -58,7 +63,22 @@
     white-space: pre-line;
   }
 
-  /* 횟수 버튼 */
+  .result-text.bold {
+    font-weight: bold;
+    animation: holyGlow 1.6s ease-in-out infinite;
+  }
+
+  @keyframes holyGlow {
+    0% { text-shadow: 0 0 0px rgba(255,230,120,0); transform: scale(1); }
+    40% {
+      text-shadow:
+        0 0 8px rgba(255,230,120,0.55),
+        0 0 18px rgba(255,210,90,0.35);
+      transform: scale(1.03);
+    }
+    100% { text-shadow: 0 0 0px rgba(255,230,120,0); transform: scale(1); }
+  }
+
   .try-counter {
     display: inline-block;
     margin-top: 12px;
@@ -68,16 +88,10 @@
     color: white;
     font-size: 14px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-    transform: scale(1);
   }
 
-  .count-number {
-    font-weight: bold;
-    font-size: 16px;
-    margin-left: 6px;
-  }
+  .count-number { font-weight: bold; font-size: 16px; margin-left: 6px; }
 
-  /* 숫자 변경 애니메이션 */
   @keyframes bump {
     0% { transform: scale(1); }
     30% { transform: scale(1.25); }
@@ -85,9 +99,7 @@
     100% { transform: scale(1); }
   }
 
-  .bump {
-    animation: bump 0.35s ease;
-  }
+  .bump { animation: bump 0.35s ease; }
 
   @keyframes heartbeat {
     0% { transform: scale(1); }
@@ -97,10 +109,7 @@
     100% { transform: scale(1); }
   }
 
-  .waiting {
-    animation: heartbeat 0.6s ease-in-out infinite;
-    opacity: 0.7;
-  }
+  .waiting { animation: heartbeat 0.6s ease-in-out infinite; opacity: 0.7; }
 
   @keyframes pop {
     0% { opacity: 0; transform: scale(0.85); }
@@ -108,163 +117,47 @@
     100% { transform: scale(1); }
   }
 
-  .pop {
-    animation: pop 0.35s ease-out;
+  .pop { animation: pop 0.35s ease-out; }
+
+  .copyright { margin-top: 100px; font-size: 12px; color: #8D7860; }
+
+  /* ✅ 컨페티 최상단 */
+  .particle {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explode var(--duration) ease-out forwards;
+    z-index: 9999; /* 핵심 */
   }
 
-  .copyright {
-    margin-top: 100px;
-    font-size: 12px;
+  @keyframes explode {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+  }
+
+  /* ✅ 퇴근 텍스트 최상단 */
+  .success-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 72px;
+    font-weight: bold;
     color: #8D7860;
-  }
-
-
-/* 성공 이미지 폭발 */
-.success-burst {
-  animation: burst 0.7s ease;
-}
-
-@keyframes burst {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.4) rotate(-3deg); }
-  60% { transform: scale(0.95) rotate(2deg); }
-  100% { transform: scale(1); }
-}
-
-/* 폭죽 파티클 */
-.particle {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: explode var(--duration) ease-out forwards;
-}
-
-@keyframes explode {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--dx), var(--dy)) scale(0.2);
     opacity: 0;
+    pointer-events: none;
+    animation: textPop var(--text-duration) ease-out forwards;
+    z-index: 10000; /* 핵심 */
   }
-}
 
-/* 퇴근 텍스트 */
-.success-text {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.3);
-  font-size: 72px;
-  font-weight: bold;
-  color: #8D7860;
-  opacity: 0;
-  pointer-events: none;
-  animation: textPop var(--text-duration) ease-out forwards;
-}
-
-@keyframes textPop {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.2);
+  @keyframes textPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+    30% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
   }
-  30% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.3);
-  }
-  70% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-}
-
-.image-box {
-  width: 100%;
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative; /* ✅ 중요 */
-}
-.image-box {
-  width: 100%;
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-/* 항상 존재하는 후광 원 */
-.success-circle {
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: #FFF3B0;
-
-  filter: blur(35px);      /* ✅ 후광 핵심 */
-  opacity: 0;              /* 기본 숨김 */
-  transform: scale(0.9);
-  transition: 0.35s ease;
-
-  z-index: 0;
-}
-.result-text.bold {
-  font-weight: bold;
-  animation: holyGlow 1.6s ease-in-out infinite;
-}
-
-/* 성스러운 빛 느낌 */
-@keyframes holyGlow {
-  0% {
-    text-shadow: 0 0 0px rgba(255, 230, 120, 0.0);
-    transform: scale(1);
-  }
-  40% {
-    text-shadow:
-      0 0 8px rgba(255, 230, 120, 0.55),
-      0 0 18px rgba(255, 210, 90, 0.35);
-    transform: scale(1.03);
-  }
-  100% {
-    text-shadow: 0 0 0px rgba(255, 230, 120, 0.0);
-    transform: scale(1);
-  }
-}
-/* 성공 시 활성화 */
-.success-circle.show {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-/* 이미지가 위로 */
-.image-box img {
-  position: relative;
-  z-index: 1;
-}
-
-
-@keyframes glowPop {
-  0% {
-    transform: translate(-50%, -50%) scale(0.6);
-    opacity: 0;
-  }
-  40% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.1);
-    opacity: 0;
-  }
-}
 </style>
 </head>
 
@@ -273,16 +166,13 @@
 <div class="container">
 
   <div class="logo-wrap">
-    <img src="https://i.imgur.com/EPFQHHT.png"
-         alt="퐁모코 로고"
-         onclick="location.reload()">
+    <img src="https://i.imgur.com/EPFQHHT.png" onclick="location.reload()">
   </div>
 
   <div style="margin-bottom:20px; color:#8D7860; font-size:14px;">
     <div id="todayText"></div>
     <div id="countdownText"></div>
 
-    <!-- 버튼형 카운터 -->
     <div class="try-counter">
       오늘의 퇴근 시도 횟수
       <span id="countNumber" class="count-number">0</span>
@@ -290,12 +180,10 @@
   </div>
 
   <div class="title-image" onclick="drawCocoa()">
-    <img id="drawImage"
-         src="https://i.imgur.com/FrkpWnb.png"
-         alt="퇴근확인">
+    <img id="drawImage" src="https://i.imgur.com/FrkpWnb.png">
   </div>
 
-  <div class="result" id="resultBox">
+  <div class="result">
     <div class="image-box">
       <div id="successCircle" class="success-circle"></div>
       <img id="resultImage">
@@ -303,30 +191,20 @@
     <div class="result-text" id="resultText"></div>
   </div>
 
-  <div class="copyright">
-    © Pong PocoPoco Project
-  </div>
-
+  <div class="copyright">© Pong PocoPoco Project</div>
 </div>
 
 <script>
-  const FIREWORK_CONFIG = {
-  particleCount: 120,          // 폭죽 개수
-  distanceMin: 120,            // 퍼지는 최소 거리
-  distanceMax: 260,            // 퍼지는 최대 거리
-  duration: 2000,              // 폭죽 지속 시간(ms)
-  textDuration: 1400,          // 텍스트 지속 시간(ms)
-
-  // ✅ 여기 색상 직접 입력
-  colors: [
-    "#9ABF62",
-    "#C69B60",
-    "#FA8B60",
-    "#FFE18E",
-    "#FFE18E"
-  ]
+const FIREWORK_CONFIG = {
+  particleCount: 120,
+  distanceMin: 120,
+  distanceMax: 260,
+  duration: 1600,
+  textDuration: 1400,
+  colors: ["#9ABF62","#C69B60","#FA8B60","#FFE18E"]
 };
-  const items = [
+
+const items = [
     { img: "https://i.imgur.com/43V1qXZ.png", text: "당신은 퇴근입니다!!! 퇴근하세요!!!", success: true },
 
     { img: "https://i.imgur.com/iXYlT72.png", text: "당신은... 돼근입니다." },
@@ -350,169 +228,66 @@
 //    { img: "https://i.imgur.com/DkcENqR.png", text: "당신은... 퉤근입니다." },  // ✅ 버그 수정
   //  { img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
     { img: "https://i.imgur.com/cQ5gOlf.png", text: "당신은... 훠궈입니다.\n맛있겠다." }
-  ];
+];
 
-  function getTodayKey() {
-    const d = new Date();
-    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
-  }
-
-  function formatToday() {
-    const d = new Date();
-    return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
-  }
-
-  function getTimeUntilMidnight() {
-    const now = new Date();
-    const midnight = new Date();
-    midnight.setHours(24,0,0,0);
-    const diff = midnight - now;
-    const h = String(Math.floor(diff/3600000)).padStart(2,"0");
-    const m = String(Math.floor(diff/60000)%60).padStart(2,"0");
-    const s = String(Math.floor(diff/1000)%60).padStart(2,"0");
-    return `${h}:${m}:${s}`;
-  }
-
-  function getTodayTryCount() {
-    return parseInt(localStorage.getItem("tryCount_" + getTodayKey()) || "0");
-  }
-
-  function increaseTryCount() {
-    const key = "tryCount_" + getTodayKey();
-    const newCount = getTodayTryCount() + 1;
-    localStorage.setItem(key, newCount);
-    return newCount;
-  }
-function spawnSuccessCircle() {
-  const box = document.querySelector(".image-box");
-
-  const circle = document.createElement("div");
-  circle.className = "success-circle";
-
-  box.appendChild(circle);
-
-  setTimeout(() => circle.remove(), 500);
+function toggleSuccessCircle(show) {
+  document.getElementById("successCircle").classList.toggle("show", show);
 }
-  function animateCounter(newValue) {
-    const el = document.getElementById("countNumber");
-    el.textContent = newValue;
 
-    el.classList.remove("bump");
-    void el.offsetWidth;
-    el.classList.add("bump");
-  }
-
-function showResult(imgSrc, text, success) {
-  const img = document.getElementById("resultImage");
-  const textEl = document.getElementById("resultText");
-
-  img.src = imgSrc;
-  textEl.innerText = text;
-
-  if (success) {
-    textEl.classList.add("bold");
-  } else {
-    textEl.classList.remove("bold");
-  }
-}
-  function toggleSuccessCircle(show) {
-  const circle = document.getElementById("successCircle");
-
-  if (show) {
-    circle.classList.add("show");
-  } else {
-    circle.classList.remove("show");
-  }
-}
 function triggerSuccessEffect() {
-
   const cfg = FIREWORK_CONFIG;
-  
 
-  // 텍스트
   const text = document.createElement("div");
   text.className = "success-text";
   text.innerText = "퇴근!!!";
   text.style.setProperty("--text-duration", cfg.textDuration + "ms");
   document.body.appendChild(text);
-
   setTimeout(() => text.remove(), cfg.textDuration);
 
-  // 파티클
   for (let i = 0; i < cfg.particleCount; i++) {
-
     const p = document.createElement("div");
     p.className = "particle";
 
     const angle = Math.random() * Math.PI * 2;
-    const distance =
-      cfg.distanceMin + Math.random() * (cfg.distanceMax - cfg.distanceMin);
-
-    const dx = Math.cos(angle) * distance + "px";
-    const dy = Math.sin(angle) * distance + "px";
+    const distance = cfg.distanceMin + Math.random() * (cfg.distanceMax - cfg.distanceMin);
 
     p.style.left = "50%";
     p.style.top = "50%";
-    p.style.background =
-      cfg.colors[Math.floor(Math.random() * cfg.colors.length)];
-
-    p.style.setProperty("--dx", dx);
-    p.style.setProperty("--dy", dy);
+    p.style.background = cfg.colors[Math.floor(Math.random() * cfg.colors.length)];
+    p.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+    p.style.setProperty("--dy", Math.sin(angle) * distance + "px");
     p.style.setProperty("--duration", cfg.duration + "ms");
 
     document.body.appendChild(p);
-
     setTimeout(() => p.remove(), cfg.duration);
   }
 }
 
-   function drawCocoa() {
-    const drawImg = document.getElementById("drawImage");
-    drawImg.classList.add("waiting");
+function showResult(result) {
+  const textEl = document.getElementById("resultText");
 
-    const count = increaseTryCount();
+  document.getElementById("resultImage").src = result.img;
+  textEl.innerText = result.text;
 
-    setTimeout(() => {
-      drawImg.classList.remove("waiting");
-
-const result = items[Math.floor(Math.random() * items.length)];
-
-showResult(result.img, result.text, result.success);
-toggleSuccessCircle(!!result.success);
-      const img = document.getElementById("resultImage");
-      img.classList.remove("pop");
-      void img.offsetWidth;
-      img.classList.add("pop");
-
-      animateCounter(count);
-
-   if (result.success) {
-  spawnSuccessCircle();     // ✅ 이미지 뒤 원
-  triggerSuccessEffect();   // (폭죽 쓰고 있으면 유지)
+  textEl.classList.toggle("bold", !!result.success);
+  toggleSuccessCircle(!!result.success);
 }
 
-    }, 800);
-   }
-  function updateDateInfo() {
-    document.getElementById("todayText").innerText =
-      `오늘 날짜 · ${formatToday()}`;
-    document.getElementById("countdownText").innerText =
-      `초과 업무까지 남은 시간 · ${getTimeUntilMidnight()}`;
-  }
+function drawCocoa() {
+  const drawImg = document.getElementById("drawImage");
+  drawImg.classList.add("waiting");
 
-  window.onload = function () {
-    updateDateInfo();
-    setInterval(updateDateInfo, 1000);
+  setTimeout(() => {
+    drawImg.classList.remove("waiting");
 
-    animateCounter(getTodayTryCount());
+    const result = items[Math.floor(Math.random() * items.length)];
+    showResult(result);
 
-    if (localStorage.getItem("lastDrawImg")) {
-      showResult(
-        localStorage.getItem("lastDrawImg"),
-        localStorage.getItem("lastDrawText")
-      );
-    }
-  };
+    document.getElementById("resultImage").classList.add("pop");
+
+    if (result.success) triggerSuccessEffect();
+  }, 800);
+}
 </script>
 
 </body>
