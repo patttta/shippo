@@ -92,13 +92,32 @@
 
   .count-number { font-weight: bold; font-size: 16px; margin-left: 6px; }
 
-  .waiting { animation: heartbeat 0.6s ease-in-out infinite; opacity: 0.7; }
+  @keyframes bump {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.25); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+
+  .bump { animation: bump 0.35s ease; }
 
   @keyframes heartbeat {
     0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    25% { transform: scale(1.05); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.05); }
     100% { transform: scale(1); }
   }
+
+  .waiting { animation: heartbeat 0.6s ease-in-out infinite; opacity: 0.7; }
+
+  @keyframes pop {
+    0% { opacity: 0; transform: scale(0.85); }
+    60% { opacity: 1; transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .pop { animation: pop 0.35s ease-out; }
 
   .particle {
     position: fixed;
@@ -140,26 +159,35 @@
 
 <body>
 
-<div style="margin-bottom:20px; color:#8D7860; font-size:14px;">
-  <div id="todayText"></div>
-  <div id="countdownText"></div>
+<div class="container">
 
-  <div class="try-counter">
-    오늘의 퇴근 시도 횟수
-    <span id="countNumber" class="count-number">0</span>
+  <div class="logo-wrap">
+    <img src="https://i.imgur.com/EPFQHHT.png" onclick="location.reload()">
   </div>
-</div>
 
-<div class="title-image" onclick="drawCocoa()">
-  <img id="drawImage" src="https://i.imgur.com/FrkpWnb.png">
-</div>
+  <div style="margin-bottom:20px; color:#8D7860; font-size:14px;">
+    <div id="todayText"></div>
+    <div id="countdownText"></div>
 
-<div class="result">
-  <div class="image-box">
-    <div id="successCircle" class="success-circle"></div>
-    <img id="resultImage">
+    <div class="try-counter">
+      오늘의 퇴근 시도 횟수
+      <span id="countNumber" class="count-number">0</span>
+    </div>
   </div>
-  <div class="result-text" id="resultText"></div>
+
+  <div class="title-image" onclick="drawCocoa()">
+    <img id="drawImage" src="https://i.imgur.com/FrkpWnb.png">
+  </div>
+
+  <div class="result">
+    <div class="image-box">
+      <div id="successCircle" class="success-circle"></div>
+      <img id="resultImage">
+    </div>
+    <div class="result-text" id="resultText"></div>
+  </div>
+
+  <div class="copyright">© Pong PocoPoco Project</div>
 </div>
 
 <script>
@@ -172,8 +200,34 @@ const FIREWORK_CONFIG = {
   colors: ["#9ABF62","#C69B60","#FA8B60","#FFE18E"]
 };
 
+const items = [
+    { img: "https://i.imgur.com/43V1qXZ.png", text: "당신은 퇴근입니다!!! 퇴근하세요!!!", success: true },
+
+    { img: "https://i.imgur.com/iXYlT72.png", text: "당신은... 돼근입니다." },
+    { img: "https://i.imgur.com/Hj3WzRD.png", text: "당신은... 되근입니다." },
+    { img: "https://i.imgur.com/i7u6ruv.png", text: "당신은... 야근입니다." },
+    { img: "https://i.imgur.com/lu0Fc0c.png", text: "당신은... 잔업입니다." },
+    { img: "https://i.imgur.com/EIp79VK.png", text: "당신은... 최근입니다." },
+    { img: "https://i.imgur.com/dfvstTb.png", text: "당신은... 퇴글입니다." },
+    { img: "https://i.imgur.com/IzwTjVw.png", text: "당신은... 출근입니다." },
+    { img: "https://i.imgur.com/pJYzzc7.png", text: "당신은... 택견입니다." },
+    { img: "https://i.imgur.com/7zQQjob.png", text: "당신은... 토i근입니다." },
+    { img: "https://i.imgur.com/0w22csA.png", text: "당신은... 퇘근입니다." },
+    { img: "https://i.imgur.com/f804lz2.png", text: "당신은... 퇴군입니다." },
+    { img: "https://i.imgur.com/EcsB4z7.png", text: "당신은... 퇴귿입니다." },
+    { img: "https://i.imgur.com/YTeb28e.png", text: "당신은... 퇴긍입니다." },
+    { img: "https://i.imgur.com/sVzyhut.png", text: "당신은... 퇴긴입니다." },
+    { img: "https://i.imgur.com/KD4dlGH.png", text: "당신은... 퇴끈입니다." },
+    { img: "https://i.imgur.com/6bZUuGo.png", text: "당신은... 퇴큰입니다." },
+    { img: "https://i.imgur.com/KSsHZdL.png", text: "당신은... 퉤!!!" },
+    { img: "https://i.imgur.com/DkcENqR.png", text: "당신은... 퉤근입니다." },
+    { img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
+    { img: "https://i.imgur.com/cQ5gOlf.png", text: "당신은... 훠궈입니다.\n맛있겠다." }
+];
+
 function getTodayKey() {
-  return new Date().toISOString().slice(0,10);
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 }
 
 function getTodayTryCount() {
@@ -182,36 +236,21 @@ function getTodayTryCount() {
 
 function increaseTryCount() {
   const key = "try_" + getTodayKey();
-  const v = getTodayTryCount() + 1;
-  localStorage.setItem(key, v);
-  return v;
+  const value = getTodayTryCount() + 1;
+  localStorage.setItem(key, value);
+  return value;
 }
 
-function formatToday() {
-  const d = new Date();
-  return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
-}
-
-function getTimeUntilMidnight() {
-  const now = new Date();
-  const midnight = new Date();
-  midnight.setHours(24,0,0,0);
-  const diff = midnight - now;
-
-  const h = String(Math.floor(diff/3600000)).padStart(2,"0");
-  const m = String(Math.floor(diff/60000)%60).padStart(2,"0");
-  const s = String(Math.floor(diff/1000)%60).padStart(2,"0");
-
-  return `${h}:${m}:${s}`;
-}
-
-function updateDateInfo() {
-  todayText.innerText = `오늘 날짜 · ${formatToday()}`;
-  countdownText.innerText = `초과 업무까지 남은 시간 · ${getTimeUntilMidnight()}`;
+function animateCounter(v) {
+  const el = document.getElementById("countNumber");
+  el.textContent = v;
+  el.classList.remove("bump");
+  void el.offsetWidth;
+  el.classList.add("bump");
 }
 
 function toggleSuccessCircle(show) {
-  successCircle.classList.toggle("show", show);
+  document.getElementById("successCircle").classList.toggle("show", show);
 }
 
 function triggerSuccessEffect() {
@@ -243,57 +282,60 @@ function triggerSuccessEffect() {
   }
 }
 
-const items = [
-{ img: "https://i.imgur.com/43V1qXZ.png", text: "당신은 퇴근입니다!!! 퇴근하세요!!!", success: true },
+function showResult(result) {
+  document.getElementById("resultImage").src = result.img;
 
-{ img: "https://i.imgur.com/iXYlT72.png", text: "당신은... 돼근입니다." },
-{ img: "https://i.imgur.com/Hj3WzRD.png", text: "당신은... 되근입니다." },
-{ img: "https://i.imgur.com/i7u6ruv.png", text: "당신은... 야근입니다." },
-{ img: "https://i.imgur.com/lu0Fc0c.png", text: "당신은... 잔업입니다." },
-{ img: "https://i.imgur.com/EIp79VK.png", text: "당신은... 최근입니다." },
-{ img: "https://i.imgur.com/dfvstTb.png", text: "당신은... 퇴글입니다." },
-{ img: "https://i.imgur.com/IzwTjVw.png", text: "당신은... 출근입니다." },
-{ img: "https://i.imgur.com/pJYzzc7.png", text: "당신은... 택견입니다." },
-{ img: "https://i.imgur.com/7zQQjob.png", text: "당신은... 토i근입니다." },
-{ img: "https://i.imgur.com/0w22csA.png", text: "당신은... 퇘근입니다." },
-{ img: "https://i.imgur.com/f804lz2.png", text: "당신은... 퇴군입니다." },
-{ img: "https://i.imgur.com/EcsB4z7.png", text: "당신은... 퇴귿입니다." },
-{ img: "https://i.imgur.com/YTeb28e.png", text: "당신은... 퇴긍입니다." },
-{ img: "https://i.imgur.com/sVzyhut.png", text: "당신은... 퇴긴입니다." },
-{ img: "https://i.imgur.com/KD4dlGH.png", text: "당신은... 퇴끈입니다." },
-{ img: "https://i.imgur.com/6bZUuGo.png", text: "당신은... 퇴큰입니다." },
-{ img: "https://i.imgur.com/KSsHZdL.png", text: "당신은... 퉤!!!" },
-{ img: "https://i.imgur.com/DkcENqR.png", text: "당신은... 퉤근입니다." },
-{ img: "https://i.imgur.com/xnCATX6.png", text: "당신은... 튀근입니다." },
-{ img: "https://i.imgur.com/cQ5gOlf.png", text: "당신은... 훠궈입니다.\n맛있겠다." }
-];
+  const textEl = document.getElementById("resultText");
+  textEl.innerText = result.text;
 
-function showResult(result, count) {
-  resultImage.src = result.img;
-  resultText.innerText = result.text;
-  resultText.classList.toggle("bold", !!result.success);
-  countNumber.innerText = count;
+  textEl.classList.toggle("bold", !!result.success);
   toggleSuccessCircle(!!result.success);
 }
 
 function drawCocoa() {
-  drawImage.classList.add("waiting");
+  const drawImg = document.getElementById("drawImage");
+  drawImg.classList.add("waiting");
 
   const count = increaseTryCount();
 
   setTimeout(() => {
-    drawImage.classList.remove("waiting");
+    drawImg.classList.remove("waiting");
 
     const result = items[Math.floor(Math.random() * items.length)];
-    showResult(result, count);
+
+    showResult(result);
+
+    const img = document.getElementById("resultImage");
+    img.classList.remove("pop");
+    void img.offsetWidth;
+    img.classList.add("pop");
+
+    animateCounter(count);
 
     if (result.success) triggerSuccessEffect();
   }, 800);
 }
 
+function updateDateInfo() {
+  const d = new Date();
+  document.getElementById("todayText").innerText =
+    `오늘 날짜 · ${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;
+
+  const midnight = new Date();
+  midnight.setHours(24,0,0,0);
+  const diff = midnight - d;
+
+  const h = String(Math.floor(diff/3600000)).padStart(2,"0");
+  const m = String(Math.floor(diff/60000)%60).padStart(2,"0");
+  const s = String(Math.floor(diff/1000)%60).padStart(2,"0");
+
+  document.getElementById("countdownText").innerText =
+    `초과 업무까지 남은 시간 · ${h}:${m}:${s}`;
+}
+
 updateDateInfo();
 setInterval(updateDateInfo, 1000);
-countNumber.innerText = getTodayTryCount();
+animateCounter(getTodayTryCount());
 </script>
 
 </body>
