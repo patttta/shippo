@@ -185,19 +185,45 @@
   }
 }
 
-  .success-glow {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: 320px;
-  height: 320px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #FFE18E; /* 연노란색 */
-  pointer-events: none;
-  z-index: -1;
+.image-box {
+  width: 100%;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* ✅ 중요 */
+}
 
-  animation: glowPop 0.6s ease-out forwards;
+/* 성공 원 */
+.success-circle {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: #FFF3B0; /* 연노란색 */
+  z-index: 0;
+
+  animation: circlePop 0.5s ease-out forwards;
+}
+
+@keyframes circlePop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* 이미지가 원 위에 오도록 */
+.image-box img {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes glowPop {
@@ -330,7 +356,16 @@
     localStorage.setItem(key, newCount);
     return newCount;
   }
+function spawnSuccessCircle() {
+  const box = document.querySelector(".image-box");
 
+  const circle = document.createElement("div");
+  circle.className = "success-circle";
+
+  box.appendChild(circle);
+
+  setTimeout(() => circle.remove(), 500);
+}
   function animateCounter(newValue) {
     const el = document.getElementById("countNumber");
     el.textContent = newValue;
@@ -348,10 +383,7 @@ function triggerSuccessEffect() {
 
   const cfg = FIREWORK_CONFIG;
   
- const glow = document.createElement("div");
-  glow.className = "success-glow";
-  document.body.appendChild(glow);
-  setTimeout(() => glow.remove(), 600);
+
   // 텍스트
   const text = document.createElement("div");
   text.className = "success-text";
@@ -409,9 +441,10 @@ function triggerSuccessEffect() {
 
       animateCounter(count);
 
-      if (result.success) {
-        triggerSuccessEffect(); // ✅ 핵심
-      }
+   if (result.success) {
+  spawnSuccessCircle();     // ✅ 이미지 뒤 원
+  triggerSuccessEffect();   // (폭죽 쓰고 있으면 유지)
+}
 
     }, 800);
    }
